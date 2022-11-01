@@ -1,0 +1,465 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "65618705",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{0: 23, 1: 28, 2: 19, 3: 20, 4: 22, 5: 10, 6: 26, 7: 17, 8: 13, 9: 24, 10: 14}\n"
+     ]
+    }
+   ],
+   "source": [
+    "f = open('numbers.txt', \"r\")\n",
+    "refnum = f.read()\n",
+    "\n",
+    "freqdict = {}\n",
+    "nums = range(11)\n",
+    "for i in nums:\n",
+    "    freqdict[i] = refnum.count(str(i))\n",
+    "print(freqdict)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "122667e0",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "\n",
+    "x = freqdict.keys()\n",
+    "y = freqdict.values()\n",
+    "\n",
+    "plt.xlabel('Element')\n",
+    "plt.ylabel('Frequency')\n",
+    "\n",
+    "plt.bar(x,y)\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "aa982acd",
+   "metadata": {
+    "scrolled": false
+   },
+   "outputs": [],
+   "source": [
+    "import json\n",
+    "\n",
+    "f = open(\"frequency.json\", \"x\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "fd56f739",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{\"0\": 23, \"1\": 28, \"2\": 19, \"3\": 20, \"4\": 22, \"5\": 10, \"6\": 26, \"7\": 17, \"8\": 13, \"9\": 24, \"10\": 14}\n"
+     ]
+    }
+   ],
+   "source": [
+    "with open(\"frequency.json\", \"w\") as out:\n",
+    "    json.dump(freqdict, out)\n",
+    "\n",
+    "f = open(\"frequency.json\", \"r\")\n",
+    "print(f.read())\n",
+    "f.close()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "9c2d398b",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "   Order Date             Order ID Payment Instrument Type     Website  Purchase Order Number Ordering Customer Email Shipment Date Shipping Address Name Shipping Address Street 1  Shipping Address Street 2 Shipping Address City Shipping Address State Shipping Address Zip Order Status Carrier Name & Tracking Number  Subtotal  Shipping Charge  Tax Before Promotions  Total Promotions  Tax Charged  Total Charged Buyer Name  Group Name\n",
+      "0      4/1/19  112-0000000-0000001             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        4/1/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     35.00             0.00                   1.93               0.0         1.93          36.93  Your Name         NaN\n",
+      "1      4/1/19  112-0000000-0000002             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        4/1/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     16.99             0.00                   0.00               0.0         0.00          16.99  Your Name         NaN\n",
+      "2      4/1/19  112-0000000-0000003             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        4/1/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      9.99             0.00                   0.00               0.0         0.00           9.99  Your Name         NaN\n",
+      "3      4/4/19  112-0000000-0000004             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        4/5/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                      UPS(0002)    147.98             0.00                   8.14               0.0         8.14         156.12  Your Name         NaN\n",
+      "4      4/5/19  112-0000000-0000005             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        4/7/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     14.99             0.00                   0.00               0.0         0.00          14.99  Your Name         NaN\n",
+      "5      4/5/19  112-0000000-0000006             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        4/8/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     11.99             0.00                   0.66               0.0         0.66          12.65  Your Name         NaN\n",
+      "6      4/7/19  112-0000000-0000007             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        4/8/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     38.98             0.00                   1.65               0.0         1.65          40.63  Your Name         NaN\n",
+      "7      4/8/19  112-0000000-0000008             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        4/8/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                      UPS(0002)     44.99             0.00                   0.00               0.0         0.00          44.99  Your Name         NaN\n",
+      "8     4/20/19  112-0000000-0000009             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       4/21/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     27.30             0.00                   1.50               0.0         1.50          28.80  Your Name         NaN\n",
+      "9     4/23/19  112-0000000-0000010             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       4/24/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                      UPS(0002)     37.08             0.00                   0.00               0.0         0.00          37.08  Your Name         NaN\n",
+      "10     5/5/19  112-0000000-0000011             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        5/7/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped               China Post(0003)     12.99             0.00                   0.00               0.0         0.00          12.99  Your Name         NaN\n",
+      "11     5/6/19  112-0000000-0000012             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        5/7/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      7.20             0.00                   0.40               0.0         0.40           7.60  Your Name         NaN\n",
+      "12    5/10/19  112-0000000-0000013             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       5/12/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     27.99             0.00                   0.00               0.0         0.00          27.99  Your Name         NaN\n",
+      "13    5/14/19  112-0000000-0000014             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       5/15/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     15.32             0.00                   0.84               0.0         0.84          16.16  Your Name         NaN\n",
+      "14    5/18/19  112-0000000-0000015             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       5/19/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      9.95             0.00                   0.55               0.0         0.55          10.50  Your Name         NaN\n",
+      "15    5/19/19  112-0000000-0000016             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       5/20/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     38.89             0.00                   0.00               0.0         0.00          38.89  Your Name         NaN\n",
+      "16    5/21/19  112-0000000-0000017             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       5/22/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      8.95             0.00                   0.49               0.0         0.49           9.44  Your Name         NaN\n",
+      "17    5/21/19  112-0000000-0000018             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       5/22/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     12.99             0.00                   0.00               0.0         0.00          12.99  Your Name         NaN\n",
+      "18    5/21/19  112-0000000-0000019             Visa - 5555  Amazon.com                    NaN    your_email@gmail.com       5/22/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      7.99             0.00                   0.00               0.0         0.00           7.99  Your Name         NaN\n",
+      "19    5/22/19  112-0000000-0000020             Visa - 5555  Amazon.com                    NaN    your_email@gmail.com       5/22/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     16.98             0.00                   0.93               0.0         0.93          17.91  Your Name         NaN\n",
+      "20    5/22/19  112-0000000-0000021             Visa - 5555  Amazon.com                    NaN    your_email@gmail.com       5/23/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     35.00             0.00                   1.92               0.0         1.92          36.92  Your Name         NaN\n",
+      "21    5/22/19  112-0000000-0000022             Visa - 5555  Amazon.com                    NaN    your_email@gmail.com       5/23/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      7.50             0.00                   0.41               0.0         0.41           7.91  Your Name         NaN\n",
+      "22    5/24/19  112-0000000-0000023             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       5/25/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      7.67             0.00                   0.00               0.0         0.00           7.67  Your Name         NaN\n",
+      "23    5/25/19  112-0000000-0000024             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       5/27/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      9.80             0.00                   0.00               0.0         0.00           9.80  Your Name         NaN\n",
+      "24    5/28/19  112-0000000-0000025             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       5/28/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     13.95             0.00                   0.00               0.0         0.00          13.95  Your Name         NaN\n",
+      "25    5/29/19  112-0000000-0000026             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       5/30/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      9.99             0.00                   0.00               0.0         0.00           9.99  Your Name         NaN\n",
+      "26    5/30/19  112-0000000-0000027             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        6/1/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                      UPS(0002)     10.98             0.00                   0.60               0.0         0.60          11.58  Your Name         NaN\n",
+      "27    5/30/19  112-0000000-0000028             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       5/30/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     32.98             0.00                   0.82               0.0         0.82          33.80  Your Name         NaN\n",
+      "28     6/3/19  112-0000000-0000029             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        6/5/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     28.99             0.00                   0.00               0.0         0.00          28.99  Your Name         NaN\n",
+      "29     6/3/19  112-0000000-0000030             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        6/5/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                      UPS(0002)     13.88             0.00                   0.00               0.0         0.00          13.88  Your Name         NaN\n",
+      "30     6/5/19  112-0000000-0000031             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        6/5/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     11.62             0.00                   0.64               0.0         0.64          12.26  Your Name         NaN\n",
+      "31    6/18/19  112-0000000-0000032             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       6/19/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     11.98             0.00                   0.66               0.0         0.66          12.64  Your Name         NaN\n",
+      "32    6/25/19  112-0000000-0000033             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       6/26/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                      UPS(0002)     51.99             0.00                   0.00               0.0         0.00          51.99  Your Name         NaN\n",
+      "33    6/25/19  112-0000000-0000034             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       6/26/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     10.59             0.00                   0.00               0.0         0.00          10.59  Your Name         NaN\n",
+      "34     7/3/19  112-0000000-0000035             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        7/4/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      7.94             3.99                   0.00               0.0         0.00          11.93  Your Name         NaN\n",
+      "35     7/3/19  112-0000000-0000036             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        7/5/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      8.32             7.96                   0.00               0.0         0.00          16.28  Your Name         NaN\n",
+      "36     7/3/19  112-0000000-0000037             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        7/8/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     25.62             0.00                   0.85               0.0         0.85          26.47  Your Name         NaN\n",
+      "37     7/3/19  112-0000000-0000038             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        7/5/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      0.52             4.95                   0.00               0.0         0.00           5.47  Your Name         NaN\n",
+      "38     7/3/19  112-0000000-0000039             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        7/4/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      5.43             3.99                   0.00               0.0         0.00           9.42  Your Name         NaN\n",
+      "39     7/6/19  112-0000000-0000040             Visa - 5555  Amazon.com                    NaN    your_email@gmail.com        7/7/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     12.99             0.00                   0.00               0.0         0.00          12.99  Your Name         NaN\n",
+      "40     7/6/19  112-0000000-0000041             Visa - 5555  Amazon.com                    NaN    your_email@gmail.com        7/8/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)    102.47             0.00                   4.95               0.0         4.95         107.42  Your Name         NaN\n",
+      "41     7/6/19  112-0000000-0000042             Visa - 5555  Amazon.com                    NaN    your_email@gmail.com        7/7/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                      UPS(0002)     79.97             0.00                   0.00              10.0         0.00          69.97  Your Name         NaN\n",
+      "42     7/6/19  112-0000000-0000043             Visa - 5555  Amazon.com                    NaN    your_email@gmail.com        7/8/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     49.99             0.00                   0.00               4.0         0.00          45.99  Your Name         NaN\n",
+      "43     7/6/19  112-0000000-0000044             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        7/7/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)    199.99             0.00                  11.00               0.0        11.00         210.99  Your Name         NaN\n",
+      "44     7/7/19  112-0000000-0000045             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        7/8/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                      UPS(0002)     41.97             0.00                   0.00               0.0         0.00          41.97  Your Name         NaN\n",
+      "45     7/9/19  112-0000000-0000046             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        7/9/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     15.60             0.00                   0.86               0.0         0.86          16.46  Your Name         NaN\n",
+      "46    7/17/19  112-0000000-0000047             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       7/18/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     36.49             0.00                   2.01               0.0         2.01          38.50  Your Name         NaN\n",
+      "47    7/18/19  112-0000000-0000048             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       7/19/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                      UPS(0002)     15.95             0.00                   0.00               0.0         0.00          15.95  Your Name         NaN\n",
+      "48    7/18/19  112-0000000-0000049             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       7/18/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     99.63             0.00                   3.34               0.0         3.34         102.97  Your Name         NaN\n",
+      "49    7/18/19  112-0000000-0000050             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       7/18/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     12.78             0.00                   0.70               0.0         0.70          13.48  Your Name         NaN\n",
+      "50    7/18/19  112-0000000-0000051             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       7/18/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     12.78             0.00                   0.70               0.0         0.70          13.48  Your Name         NaN\n",
+      "51    7/21/19  112-0000000-0000052             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       7/21/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      6.49             0.00                   0.36               0.0         0.36           6.85  Your Name         NaN\n",
+      "52    7/21/19  112-0000000-0000053             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       7/22/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      5.76             0.00                   0.00               0.0         0.00           5.76  Your Name         NaN\n",
+      "53    7/23/19  112-0000000-0000054             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       7/23/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                      UPS(0002)     42.93             0.00                   2.36               0.0         2.36          45.29  Your Name         NaN\n",
+      "54    7/30/19  112-0000000-0000055             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       7/31/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)     49.99             0.00                   0.00              15.0         0.00          34.99  Your Name         NaN\n",
+      "55    7/30/19  112-0000000-0000056             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        8/1/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      6.30             0.00                   0.00               0.0         0.00           6.30  Your Name         NaN\n",
+      "56    7/30/19  112-0000000-0000057             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        8/1/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                     USPS(0001)      5.99             0.00                   0.05               5.0         0.05           1.04  Your Name         NaN\n",
+      "57    7/31/19  112-0000000-0000058             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com       7/31/19             Your Name             1 YOUR STREET                        NaN               ANYTOWN                     ME           00001-0001      Shipped                      UPS(0002)     35.99             0.00                   0.00               0.0         0.00          35.99  Your Name         NaN\n",
+      "58    7/31/19  112-0000000-0000059             Visa - 0001  Amazon.com                    NaN    your_email@gmail.com        8/1/19           Your Friend    5 FRIEND STREET APT. 1                        NaN            WASHINGTON                     DC           20001-5497      Shipped                      UPS(0002)     54.88             0.00                   3.29               0.0         3.29          58.17  Your Name         NaN\n"
+     ]
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "df = pd.read_csv('amazon-orders1.csv')\n",
+    "print(df.to_string())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "36c64cdb",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "30.131016949152542\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df[\"Total Charged\"].mean())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "2e892d0f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "36.42273246651456\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df[\"Total Charged\"].std())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "6d28c5cc",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "15.95\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df[\"Total Charged\"].median())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "32f6c391",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "210.99\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df[\"Total Charged\"].max())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "id": "48db4625",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1.04\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df[\"Total Charged\"].min())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 59,
+   "id": "e6211c94",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{'April': 39.917, 'May': 17.575555555555553, 'June': 19.281666666666666, 'July': 39.25833333333333}\n"
+     ]
+    }
+   ],
+   "source": [
+    "April_charges = df[\"Total Charged\"].head(10)\n",
+    "April_sum = sum(April_charges)\n",
+    "April_avg = April_charges.mean()\n",
+    "April_orders = 10\n",
+    "May_charges = df[\"Total Charged\"].loc[range(12,30)]\n",
+    "May_sum = sum(May_charges)\n",
+    "May_avg = May_charges.mean()\n",
+    "May_orders = 18\n",
+    "June_charges = df[\"Total Charged\"].loc[range(30,36)]\n",
+    "June_sum = sum(June_charges)\n",
+    "June_avg = June_charges.mean()\n",
+    "June_orders = 6\n",
+    "July_charges = df[\"Total Charged\"].tail(24)\n",
+    "July_sum = sum(July_charges)\n",
+    "July_avg = July_charges.mean()\n",
+    "July_orders = 24\n",
+    "\n",
+    "monthly_avg = {'April': April_avg, 'May': May_avg, 'June': June_avg, 'July': July_avg}\n",
+    "print(monthly_avg)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 45,
+   "id": "10afe2e5",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{'April': 399.17, 'May': 316.35999999999996, 'June': 115.69, 'July': 942.2}\n"
+     ]
+    }
+   ],
+   "source": [
+    "monthly_sum = {'April': April_sum, 'May': May_sum, 'June': June_sum, 'July': July_sum}\n",
+    "print(monthly_sum)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 60,
+   "id": "dc70544d",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{'April': 10, 'May': 18, 'June': 6, 'July': 24}\n"
+     ]
+    }
+   ],
+   "source": [
+    "monthly_orders = {'April': April_orders, 'May': May_orders, 'June': June_orders, 'July': July_orders}\n",
+    "print(monthly_orders)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 66,
+   "id": "190c8436",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAATMAAAD3CAYAAABxVrNIAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjUuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/YYfK9AAAACXBIWXMAAAsTAAALEwEAmpwYAAAoa0lEQVR4nO3deXxU5dn/8c81CUtCYFgS1gDDImSAsApUkUWtdUGL1bqjUvFH9Wmf57Hqg/lZq7FrflqXUtpatVJwwbXalthWH6sC7iCyyAyuQfZFlgiEkGTu3x/nRENMyGQymXvmzPV+vfJKZjlzXxMmX+6zXUeMMSilVKrz2S5AKaXiQcNMKeUJGmZKKU/QMFNKeYKGmVLKEzTMlFKeoGHWDCJiRGSw7TrqEpEyEflmI49NE5HNia5JKRs8EWYicqDOV0REKurcvqyRZeL6hy4ir7hhN6re/c+590+Lwxh/FpGft/R1ohyrrM7vcYeILBCRnESMHQ/HCnnlTZ4IM2NMTu0X8BlwTp37Hk1gKR8AV9TeEJFuwDeAXQmsIZ7OcX+nY4HxwC2W61GqUZ4Is8aISDsRuVdEtrpf97r3dQD+AfSuM4PrLSITROQNEdknIttEZL6ItG3GkI8CF4lIhnv7EuBZ4EhTNbmPTRORzSJyg4jsdGv4nvvYHOAyYK5b79/rjDtaRNaIyH4ReUJE2jfwu/gfEXmm3n2/FZF7m3pTxpgt7u9rhIh0EZElIrJLRPa6P+e7r3eBiKysN8YNIvKc+/OfReT3IvIP9z28JiI93d/BXhEJi8iYOsv2FpFn3LE+FZH/qvNYsYg8KSKLROQLEXlfRI53H3sY6Af83R1nblPvUaU+T4cZ8GOcmdFoYBQwAbjFGHMQOBPYWmcGtxWoAX4E5AInAKcC/9GM8bYC64FvubevABZFU1Odx3sCfqAPMBv4nYh0McbcjxOWd7j1nlNnmQuBM4ABwEhgVgO1PQKcISKdAUQkE7gIeLipNyUifYGzgFU4n5kFQH+cwKgA5rtP/RswQESCdRafWW+MC933mwtUAm8A77q3nwbudsf0AX8HVru/i1OB60Tk9Dqv9W3gcaCzO/Z8AGPM5Rw9Q7+jqfeoUp/Xw+wy4KfGmJ3GmF3A7cDljT3ZGLPSGPOmMabaGFMG/BGY2swxFwFXiMhQoLMx5o1m1lTlPl5ljHkeOAAMbWLMecaYrcaYPTgBMLqB97YNWApc4N51BrDbGLOy/nPreE5E9gHLgVeBXxpjPjfGPGOMOWSM+QL4Be7vyBhTCTyBE2CIyHAgACyp85rPur/nwziz1sPGmEXGmBp32dqZ2XggzxjzU2PMEWPMJ8ADwMV1Xmu5MeZ5d9mHcf5zUGkq03YBraw3sLHO7Y3ufQ0SkSE4M4PjgWyc38+x/tgb8hfgLuBzGp71NFXT58aY6jq3DwFNbXjfXu/5jb3HhcC1OKFQf8bUkHONMf9b9w4RyQbuwQnDLu7dHUUkww2VhcBiEbkFJ6SfdEOu1o46P1c0cLv2vfbH2Qywr87jGcCyOrfrv+/2IpJZ7/en0oTXZ2Zbcf4oavVz7wNoqF3IH4AwcJwxphNwMyDNGdAYcwhn+9K1NBwWx6qpyZdvTi0NeA4YKSIjgLNxVlub6wacmeJE93c0xb1fAIwxb+JsI5wMXEoUq7GN2AR8aozpXOerozHmrCiX13YwacbrYbYYuEVE8kQkF7gVZ9sRODOCbiLir/P8jkA5cEBECnACKRY3A1PdVdXm1NSUHcDAGGvCXbV7GngMeNsY81kML9MRZwa1T0S6Arc18JxFONuvqo0xy2Ms922gXERuEpEsEckQkREiMj7K5Vv0u1Kpx+th9nNgBbAGWIuzofnnAMaYME6wfOLuvewN3Igzm/gCZ1XsiVgGdbdfNfZH3GhNUfgTMMyt97lYasNZDSwk9hnTvUAWsBt4E/hnA895GBjRgjFwV1nPwdn+96k73oM4O0ei8Suc/zT2iciNsdahUodoc8b0IiL9cFalexpjyltpjCxgJzDWGPNha4yhVH1en5mpOtzDHa4HHm+tIHNdC7yjQaYSyet7M5XLPVB4B87e0zNacZwynJ0B57bWGEo1RFczlVKeoKuZSilP0DBTSnmChplSyhM0zJRSnqBhppTyBA0zpZQn6HFmSnnAypUru2dmZj6IcxqZVycpEWBddXX11ePGjdtZ/0ENM6U8IDMz88GePXsG8/Ly9vp8Pk8ePBqJRGTXrl3Dtm/f/iBOY86jeDXBlUo3I/Ly8sq9GmQAPp/P5OXl7ceZfX798QTXo5RqHT4vB1kt9z02mFsaZkopT9BtZkp5UKCodFw8X6+sZHpU7eMXLVrU+corrxz07rvvvj9mzJjDzRnjoosu6j937twd48aNO9ynT5/CFStWhHr16hV1C3SdmSml4ubxxx/vOnbs2AMPP/xw1+YsV11dzRNPPLFx3LhxzQrAujTMlFJxsX//ft+KFStyFixYUPbss892AViyZEnH448/fuhpp502aNCgQcMvvfTSfjU1NQBkZ2ePue6663qPHDmy4KWXXsqZMGHC0KVLl2bHOr6GmVIqLh599NHO06ZN2z9y5MjKzp071yxfvjwbYO3atR1+85vfbNqwYcP7ZWVl7RYtWtQFoKKiwjdixIiKNWvWhE8//fQDLR1fw0wpFRdPPvlk10suuWQvwPnnn7+ndlWzsLDw4LBhw45kZmZy4YUX7lm2bFkOQEZGBrNmzdobr/F1B4BSqsW2b9+e8eabb3b64IMPsn74wx9SU1MjImLOPvvs/SJHX62x9nbbtm0jmZnxiyCdmSmlWuzhhx/uct55532+devWtVu2bFm7ffv2Nfn5+UeWLl2as3bt2g7hcLhtTU0NTz/9dNfJkyd/0Ro1pN3MTEQM8Igx5nL3diawDXjLGHO21eKUipNoD6WIl6eeeqrb3Llzt9W9b8aMGXsfeuihvNGjRx+44YYb8sPhcNbEiRO/uPzyy/e1Rg1pdw0AETkAfAicaIypEJEzca6xuFnDTKWq1atXl40aNWq37TrqW7JkSce77rqrx8svv/xRvF5z9erVuaNGjQrUvz9dVzP/AUx3f74E52LAAIjIBBF5XURWud+HuvcvE5HRdZ73moiMTGTRSqnGpWuYPQ5cLCLtgZHAW3UeCwNTjDFjgFuBX7r3PwjMAhCRIUA7Y8yahFWsVAo6++yzv4jnrOxY0jLM3BAK4MzKnq/3sB94SkTWAfcAw937nwLOFpE2wFXAnxNSrFIqKmm3A6COvwG/BqYB3erc/zPgZWPMd0QkALwCYIw5JCIvAjOAC4HjE1JlsV+AnjjhW/vVByd0O9X56ghk4zSwq3a/qtzvlcBuYGe9r23Ax8BGivfXJOT9KNVK0jnMHgL2G2PWisi0Ovf7gS3uz7PqLfMg8HdgmTFmT9wrKvbnAWPdr3E4fZsCQLu4j3W0I8//5LS//kfVdT5gnfv1XlnJ9ISsHigVD2kbZsaYzcBvGnjoDmChiFwP/LveMitFpBxYEJciiv3DgNNwZofHA/lxed3ma7smMrA3MAk4v/bOQFHpFuBVnNnpK2Ul0z+0U55STUu7MDPG5DRw3yt8tTr5BjCkzsM/qf1BRHrjbGd8IabBi/3dccLrNOCbOKuLSeHdyHENdTnoA1zqftUNt5eBJWUl07cnrkLVLMX+uLYAonh/k8etici4GTNm7Hnuuec+BaiqqqJ79+6jRo8efTAROwHSLsxiJSJXAL8ArjfGRKJesNjfFfguzs6GKSTpTpf3TaBvFE+rG241gaLSV3AOa3mmrGT6vtarTqWCrKysyIYNG7IOHDggOTk55tlnn+3Uo0ePqkSNn5R/WMnIGLPIGNPXGPNUk08u9udQ7J9Jsb8U2A78EWdVMil/39XGt+0gWV+bsTYhAzgVZzvijkBR6V8DRaUXB4pKY27holLfqaeeuv+pp57qDLB48eKu559//pfbll9++eXsMWPGFASDwWFjxowpWL16dTuAcePGDX399dezap83duzYgrfeeivray/ehKT840pZxf5Civ1/wNlL+DBwFtDGblFN20vHbU0/65ja4lwtZzGwM1BU+mCgqHR4E8soD7r88sv3PPHEE10OHTokoVAo+4QTTjhY+9ioUaMOv/322+FQKLT+tttu2zJ37tx8gFmzZu1+8MEHcwHWrFnT7siRIzJx4sSK5o6tq5ktVez3AecAPwKmWq4mJp+YXvE88bcDMBu4KlBU+i/grrKS6f8bx9dXSWzixIkVmzdvbvfAAw90/eY3v7m/7mN79uzJuOiiiwaUlZW1FxFTVVUlALNmzdp755139qqsrNx833335V566aUxnZalYRarYn8mcCVQBAy2XE2LrI4Mkqaf1WwCnAGcESgqXQ3cDSwuK5mesG0oyo4zzjhj32233db3hRde2LBz584vM+amm27qM3Xq1C9efPHFjzds2ND2lFNOGQrQsWPHyOTJk8sfe+yxzn/729+6rly5cn0s42qYNZczE7sMuA0YZLmauFgZGdKplYcYBSwEfhUoKi0B/lBWMj3qC1Wo1HLttdfu9vv9NRMmTKhYsmRJx9r7y8vLM/Lz848A/PGPf8ytu8w111yz+/zzzx88fvz4Az169IjpAG4Ns2g5R+JfABQDQbvFxNfqyKBeCRqqNzAP+GGgqHRuWcn0vyZo3PQTxaEUrWXQoEFVP/nJT3bWv/+mm27afvXVVw+YN29ez8mTJ5fXfWzy5MmHOnToUPO9730v5s4fadcCKCbF/onA73COyvcUY9g/oPIx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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "\n",
+    "y = monthly_sum.values()\n",
+    "\n",
+    "plt.title('Total Monthly Payment')\n",
+    "plt.pie(y, labels = monthly_sum.keys())\n",
+    "plt.legend(bbox_to_anchor=(1.05,1.0), loc = 'upper left')\n",
+    "\n",
+    "plt.show()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 56,
+   "id": "959729f6",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "x = monthly_avg.keys()\n",
+    "y1 = monthly_avg.values()\n",
+    "\n",
+    "plt.xlabel('Month')\n",
+    "plt.ylabel('Average Payment Amount')\n",
+    "plt.bar(x,y1)\n",
+    "\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 68,
+   "id": "0f421168",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "y2 = monthly_orders.values()\n",
+    "\n",
+    "plt.xlabel('Month')\n",
+    "plt.ylabel('Amount')\n",
+    "plt.title('Order and Average Payment Activity')\n",
+    "plt.plot(x, y1, x, y2, marker = 'o')\n",
+    "plt.legend([\"Mean Payment\", \"Orders\"], loc = 0)\n",
+    "\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d7d2398f",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.12"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
